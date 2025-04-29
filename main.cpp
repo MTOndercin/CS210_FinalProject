@@ -30,17 +30,28 @@ public:
     Cache(): cache{} {};
 
     //add to cache
-    void add(City c)
+    void add(City c, int m)
     {
-        if(next == 10)
+        switch (m)
         {
-            next = 1;
-            cache[0] = c;
-        }
-        else
-        {
-            cache[next] = c;
-            next++;
+            case 1:
+                cout << "add 1" << endl;
+                break;
+            case 2:
+                if(next == 10)
+                {
+                   next = 1;
+                   cache[0] = c;
+                }
+                else
+                {
+                    cache[next] = c;
+                    next++;
+                }
+                break;
+            case 3:
+                cout << "add 3" << endl;
+                break;
         }
     }
 
@@ -64,6 +75,16 @@ int main()
     //variables
     Cache cache;
     string name = "", code = "", line = "", word = "";
+    int cType = 0;
+
+    //choose cache type
+    cout << "Please select a cache style\n" <<
+            "(1): Least frequently used\n" <<
+            "(2): First in, first out\n" <<
+            "(3): Random replacement\n" << endl;
+    cout << "Enter the number of your choice: ";
+    cin >> cType;
+    cin.ignore();
 
     //run loop
     while (true)
@@ -106,7 +127,7 @@ int main()
                     city.code = row[0];
                     city.name = row[1];
                     city.pop = stod(row[2]);
-                    cache.add(city);
+                    cache.add(city, cType);
                     print(city);
                     found = true;
                 }
