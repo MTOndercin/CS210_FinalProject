@@ -14,6 +14,7 @@ struct City
     string code;
     string name;
     double pop;
+    int use;
 };
 
 void print(City c)
@@ -36,7 +37,24 @@ public:
         {
             case 1:
                 //least frequently used
-                cout << "add 1" << endl;
+                if (next < 10)
+                {
+                    cache[next] = c;
+                    next++;
+                }
+                else
+                {
+                    int lowest = cache[0].use, target = 0;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (cache[i].use < lowest)
+                        {
+                            lowest = cache[i].use;
+                            target = i;
+                        }
+                    }
+                    cache[target] = c;
+                }
                 break;
             case 2:
                 //first in, first out
@@ -77,6 +95,7 @@ public:
             if(cache[i].code == c && cache[i].name == n)
             {
                 print(cache[i]);
+                cache[i].use++;
                 return true;
             }
         }
@@ -141,6 +160,7 @@ int main()
                     city.code = row[0];
                     city.name = row[1];
                     city.pop = stod(row[2]);
+                    city.use = 0;
                     cache.add(city, cType);
                     print(city);
                     found = true;
