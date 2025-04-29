@@ -35,9 +35,11 @@ public:
         switch (m)
         {
             case 1:
+                //least frequently used
                 cout << "add 1" << endl;
                 break;
             case 2:
+                //first in, first out
                 if(next == 10)
                 {
                    next = 1;
@@ -50,7 +52,19 @@ public:
                 }
                 break;
             case 3:
-                cout << "add 3" << endl;
+                //Random replacement
+                if (next < 10)
+                {
+                    cache[next] = c;
+                    next++;
+                    //cout << "add to cache" << endl;
+                }
+                else
+                {
+                    srand(time(0));
+                    cache[rand()%10] = c;
+                    //cout << "Replaced" << endl;
+                }
                 break;
         }
     }
