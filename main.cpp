@@ -6,8 +6,64 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <unordered_map>
 
 using namespace std;
+
+//provided trie structure
+struct TrieNode
+{
+    bool isEndOfWord;
+    unordered_map<char, TrieNode*> children;
+    TrieNode() : isEndOfWord(false) {}
+};
+
+
+class NameTrie
+{
+private:
+    TrieNode* root;
+public:
+    NameTrie()
+    {
+        root = new TrieNode();
+    }
+    void insert(const string& name)
+    {
+        TrieNode* node = root;
+        for (char c : name)
+        {
+            c = tolower(c); // Case-insensitive
+            if (node->children.count(c) == 0)
+                node->children[c] = new TrieNode();
+            node = node->children[c];
+        }
+        node->isEndOfWord = true;
+    }
+    bool search(const string& name)
+    {
+        TrieNode* node = root;
+        for (char c : name)
+        {
+            c = tolower(c);
+            if (node->children.count(c) == 0)
+                return false;
+            node = node->children[c];
+        }
+        return node->isEndOfWord;
+    }
+    void printTrie(TrieNode* node = nullptr, string prefix = "", string indent =
+    "")
+    {
+        if (!node) node = root;
+        if (node->isEndOfWord)
+            cout << indent << "'" << prefix << "' (END)" << endl;
+        for (auto& [ch, child] : node->children)
+        {
+            printTrie(child, prefix + ch, indent + " ");
+        }
+    }
+};
 
 struct City
 {
@@ -109,6 +165,14 @@ int main()
     Cache cache;
     string name = "", code = "", line = "", word = "";
     int cType = 0;
+    NameTrie trie;
+
+    //test trie
+    trie.insert("Saba");
+    trie.insert("Sam");
+    trie.insert("David");
+    trie.insert("Dave");
+    trie.printTrie();
 
     //choose cache type
     cout << "Please select a cache style\n" <<
